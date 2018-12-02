@@ -1,44 +1,33 @@
-#from wiltan/debian-tiny
-from ubuntu:latest
+from amazonlinux:latest
 add requires /tmp/
-#add bypass-server-password.patch /tmp/
-run apt-get update
-run apt-get -y install python-setuptools python-dev libldap2-dev libsasl2-dev git libsasl2-dev libssl-dev python-ldap python-psycopg2 libxml2-dev libxslt1-dev wget libpq-dev postgresql supervisor python-cracklib nano
-run easy_install pip
-run pip install hgnested
+run yum install -y sudo which wget tar mercurial shadow-utils
+run sudo yum install -y patch gcc libxml2-devel libxslt-devel libjpeg8-devel python3-tools python3-pip python3-ldap unoconv 
 run mkdir -p /etc/mercurial/
+run which pip3.7
 run echo "[extensions]\nhgnested =" > /etc/mercurial/hgrc
 run mkdir /tmp/gnuhealth
-
-#run hg clone http://hg.savannah.gnu.org/hgweb/health/ -r stable /tmp/gnuhealth/
 workdir /tmp/gnuhealth/
-run hg clone http://hg.savannah.gnu.org/hgweb/health -r 253d95fa46a8
+
+#Download latest stable version of GNUHealth from Savannah Mercurial Website.
+run hg clone http://hg.savannah.gnu.org/hgweb/health -r  stable 
 workdir /tmp/gnuhealth/health/tryton
-#run patch -p2 -i /tmp/bypass-server-password.patch
-run useradd -m -d /opt/gnuhealth gnuhealth
+run adduser -m -d /opt/gnuhealth gnuhealth
+run ln -sf /usr/bin/python3.7 /usr/bin/python3
+run ln -sf /usr/bin/python3 /usr/bin/python
+run ln -sf /usr/bin/pip3.7 /usr/bin/pip
+run ln -sf /usr/bin/2to3-3.7 /usr/bin/2to3
+run which pip3.7
 USER gnuhealth
 ENV HOME /opt/gnuhealth
 
+#run alias 2to3="/usr/bin/2to3-3.7"
+run ./gnuhealth-setup install
 #USER root
-run ./gnuhealth_install.sh
-#run pip install -r /tmp/requires
-# tryton end
-#run source $HOME/.gnuhealthrc
-#workdir /opt/gnuhealth/gnuhealth/tryton/server/trytond-3.2.6/etc
-#run echo timezone = America/Argentina/Buenos_Aires >> trytond.conf
-USER root
-run rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
-add run_postgresql.sh /usr/local/bin/
-run chmod +x /usr/local/bin/run_postgresql.sh
-run service postgresql start
-USER postgres
-RUN /etc/init.d/postgresql start && psql --command "CREATE USER gnuhealth WITH CREATEDB;"
-USER root
-run service postgresql stop
-add supervisor/	/etc/supervisor/conf.d/
+#run rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
+#ADD gnuhealth.service /usr/lib/systemd/system/gnuhealth.service
 add trytond.conf /etc/trytond.conf
-ADD gnuhealthd /usr/local/bin/gnuhealthd
-ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-RUN ln -s /opt/gnuhealth/gnuhealth/tryton/server/trytond-3.*/bin/trytond /usr/local/bin/
+#ADD gnuhealthd /usr/local/bin/gnuhealthd
+
+#RUN ln -s /opt/gnuhealth/gnuhealth/tryton/server/trytond-3.*/bin/trytond /usr/local/bin/
 expose 8000
-CMD ["/usr/bin/supervisord"]
+CMD ["/opt/gnuhealth/start_gnuhealth.sh"]
