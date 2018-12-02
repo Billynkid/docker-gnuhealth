@@ -1,5 +1,5 @@
 from amazonlinux:latest
-add requires /tmp/
+
 run yum install -y sudo which wget tar mercurial shadow-utils
 run sudo yum install -y patch gcc libxml2-devel libxslt-devel libjpeg8-devel python3-tools python3-pip python3-ldap unoconv 
 run mkdir -p /etc/mercurial/
