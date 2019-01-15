@@ -1,44 +1,29 @@
-#from wiltan/debian-tiny
-from ubuntu:latest
-add requires /tmp/
-#add bypass-server-password.patch /tmp/
-run apt-get update
-run apt-get -y install python-setuptools python-dev libldap2-dev libsasl2-dev git libsasl2-dev libssl-dev python-ldap python-psycopg2 libxml2-dev libxslt1-dev wget libpq-dev postgresql supervisor python-cracklib nano
-run easy_install pip
-run pip install hgnested
-run mkdir -p /etc/mercurial/
-run echo "[extensions]\nhgnested =" > /etc/mercurial/hgrc
-run mkdir /tmp/gnuhealth
+from amazonlinux:latest
+ENV TERM=xterm-256color
 
-#run hg clone http://hg.savannah.gnu.org/hgweb/health/ -r stable /tmp/gnuhealth/
-workdir /tmp/gnuhealth/
-run hg clone http://hg.savannah.gnu.org/hgweb/health -r 253d95fa46a8
-workdir /tmp/gnuhealth/health/tryton
-#run patch -p2 -i /tmp/bypass-server-password.patch
-run useradd -m -d /opt/gnuhealth gnuhealth
+#Add Dependencies
+run yum update -y
+run yum -y install git wget nano patch python3 python3-tools python3-pip 2to3 which tar python-ldap 
+run pip3 install ldap3 pymongo
+#Add GNUHealth User
+run useradd -m -d /home/gnuhealth gnuhealth
+#Make Python3 Default python binary
+run rm /usr/bin/python
+run ln -si /usr/bin/python3 /usr/bin/python
+#Switch to GNUHealth User
 USER gnuhealth
-ENV HOME /opt/gnuhealth
-
-#USER root
-run ./gnuhealth_install.sh
-#run pip install -r /tmp/requires
-# tryton end
-#run source $HOME/.gnuhealthrc
-#workdir /opt/gnuhealth/gnuhealth/tryton/server/trytond-3.2.6/etc
-#run echo timezone = America/Argentina/Buenos_Aires >> trytond.conf
-USER root
-run rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
-add run_postgresql.sh /usr/local/bin/
-run chmod +x /usr/local/bin/run_postgresql.sh
-run service postgresql start
-USER postgres
-RUN /etc/init.d/postgresql start && psql --command "CREATE USER gnuhealth WITH CREATEDB;"
-USER root
-run service postgresql stop
-add supervisor/	/etc/supervisor/conf.d/
+ENV HOME /home/gnuhealth
+workdir /home/gnuhealth
+#Get & Install GNUHealth
+run wget https://ftp.gnu.org/gnu/health/gnuhealth-latest.tar.gz
+run mkdir $HOME/gnuhealth-latest
+run tar xzf gnuhealth-latest.tar.gz -C gnuhealth-latest --strip-components=1
+workdir $HOME/gnuhealth-latest
+run ls $HOME/gnuhealth-latest
+run $HOME/gnuhealth-latest/gnuhealth-setup install
+run /bin/bash -c "source $HOME/.gnuhealthrc"
 add trytond.conf /etc/trytond.conf
-ADD gnuhealthd /usr/local/bin/gnuhealthd
-ADD supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-RUN ln -s /opt/gnuhealth/gnuhealth/tryton/server/trytond-3.*/bin/trytond /usr/local/bin/
+run ls $HOME/gnuhealth/tryton/server/
 expose 8000
-CMD ["/usr/bin/supervisord"]
+
+CMD ["./start_gnuhealth.sh"]
