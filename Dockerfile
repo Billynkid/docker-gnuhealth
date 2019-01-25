@@ -19,6 +19,6 @@ run wget https://ftp.gnu.org/gnu/health/gnuhealth-latest.tar.gz && mkdir $HOME/g
 workdir $HOME/gnuhealth-latest
 run $HOME/gnuhealth-latest/gnuhealth-setup install && rm -rf gnuhealth-latest
 run /bin/bash -c "source $HOME/.gnuhealthrc"
-add trytond.conf /etc/trytond.conf
+
 expose 8000
 CMD ["./start_gnuhealth.sh"]
