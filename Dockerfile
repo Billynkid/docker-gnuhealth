@@ -3,7 +3,7 @@ ENV TERM=xterm-256color
 
 #Add Dependencies
 run yum update -y && \
-    yum -y install git wget patch python3 python3-tools python3-pip 2to3 which tar python-ldap jq && \
+    yum -y install git wget patch python3 python3-tools python3-pip 2to3 which tar python-ldap awslogs jq && \
     yum -y clean all && \
     pip3 install ldap3 pymongo --no-cache-dir
 #Add GNUHealth User
@@ -19,6 +19,6 @@ run wget https://ftp.gnu.org/gnu/health/gnuhealth-latest.tar.gz && mkdir $HOME/g
 workdir $HOME/gnuhealth-latest
 run $HOME/gnuhealth-latest/gnuhealth-setup install && rm -rf gnuhealth-latest
 run /bin/bash -c "source $HOME/.gnuhealthrc"
-
+RUN ln -sf /dev/stdout /home/gnuhealth/gnuhealth/logs/gnuhealth.log
 expose 8000
 CMD ["./start_gnuhealth.sh"]
