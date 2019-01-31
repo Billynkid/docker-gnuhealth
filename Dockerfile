@@ -24,6 +24,7 @@ workdir $HOME/gnuhealth-latest
 run $HOME/gnuhealth-latest/gnuhealth-setup install && rm -rf gnuhealth-latest
 run /bin/bash -c "source $HOME/.gnuhealthrc"
 WORKDIR $HOME
+#Install Web Client
 RUN git clone https://github.com/tryton/sao.git
 WORKDIR $HOME/sao
 RUN npm install --production && grunt
