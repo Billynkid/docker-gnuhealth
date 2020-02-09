@@ -1,37 +1,31 @@
-from amazonlinux:latest
-ENV TERM=xterm-256color
+FROM tryton/tryton:5.0
+USER root
+RUN export DEBIAN_FRONTEND=noninteractive
+RUN apt-get update
+RUN apt-get install -y apt-utils git sudo npm
+RUN curl -sL https://deb.nodesource.com/setup_13.x | sudo -E bash -
+RUN sudo apt-get install -y nodejs
 
-#Add Dependencies
-run yum update -y && \
-    yum -y install git wget patch python3 python3-tools python3-pip 2to3 which tar awslogs jq && \
-    yum -y clean all && \
-    pip3 install pymongo --no-cache-dir
-RUN curl --silent --location https://rpm.nodesource.com/setup_8.x | bash -
-RUN yum -y install nodejs
-RUN npm install -g grunt-cli sudo npm install -g bower
-RUN npm install bower install grunt
 #Add GNUHealth User
-run useradd -m -d /home/gnuhealth gnuhealth
-#Make Python3 Default python binary
-run rm /usr/bin/python && ln -si /usr/bin/python3 /usr/bin/python
-#Switch to GNUHealth User
+RUN useradd -m -d /home/gnuhealth gnuhealth && \
+    echo "gnuhealth ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/gnuhealth && \
+    chmod 0440 /etc/sudoers.d/gnuhealth
 USER gnuhealth
-ENV HOME /home/gnuhealth
-workdir /home/gnuhealth
-#Get & Install GNUHealth
-run wget https://ftp.gnu.org/gnu/health/gnuhealth-latest.tar.gz && mkdir $HOME/gnuhealth-latest && tar xzf gnuhealth-latest.tar.gz -C gnuhealth-latest --strip-components=1 && rm gnuhealth-latest.tar.gz
-workdir $HOME/gnuhealth-latest
-run $HOME/gnuhealth-latest/gnuhealth-setup install && rm -rf gnuhealth-latest
-run /bin/bash -c "source $HOME/.gnuhealthrc"
-WORKDIR $HOME
-#Install Web Client
+ENV PATH="/home/gnuhealth/.local/bin:${PATH}"
+WORKDIR /home/gnuhealth
+
+#Install GNUHealth
+RUN python3 -m pip install --user --upgrade pip setuptools wheel
+RUN pip3 install --user gnuhealth
 RUN git clone https://github.com/tryton/sao.git
-WORKDIR $HOME/sao
-RUN npm install --production && grunt
-WORKDIR $HOME
-RUN sed -i '/^\[web\]/a\root = /home/gnuhealth/sao/' $HOME/gnuhealth/tryton/server/config/trytond.conf
-RUN ls -laSH
-RUN cat $HOME/gnuhealth/tryton/server/config/trytond.conf
-RUN ln -sf /dev/stdout /home/gnuhealth/gnuhealth/logs/gnuhealth.log
-expose 8000
-CMD ["./start_gnuhealth.sh"]
+WORKDIR ./sao
+RUN npm install --production
+#RUN sudo npm install -g grunt-cli
+#RUN npm install grunt --save-dev
+#RUN npm install grunt-po2json --save-dev
+#RUN npm install grunt-xgettext --save-dev
+#RUN grunt
+#RUN sudo npm install -g bower
+#RUN sudo bower install --allow-root
+
+
