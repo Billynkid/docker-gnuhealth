@@ -20,6 +20,7 @@ RUN pip3 install --user gnuhealth
 RUN git clone https://github.com/tryton/sao.git
 WORKDIR ./sao
 RUN npm install --production
+WORKDIR /home/gnuhealth
 #RUN sudo npm install -g grunt-cli
 #RUN npm install grunt --save-dev
 #RUN npm install grunt-po2json --save-dev
