@@ -8,7 +8,6 @@ run yum update -y && \
 RUN curl --silent --location -sL https://rpm.nodesource.com/setup_13.x | bash -
 RUN yum -y install nodejs
 RUN npm install -g grunt-cli
-RUN 
 #RUN npm install bower install grunt
 
 #Add GNUHealth User
@@ -45,9 +44,9 @@ RUN npm install grunt-xgettext --save-dev
 RUN npm install grunt --save-dev
 RUN npm install --production
 RUN grunt
-
 WORKDIR $HOME
-# Add SAO Webroot
+
+# Add SAO Webroot to trytond.conf
 RUN sed -i '/^\[web\]/a\root = /home/gnuhealth/sao/' $HOME/gnuhealth/tryton/server/config/trytond.conf
 
 # Listen on 0.0.0.0 to expose outside container
@@ -59,7 +58,6 @@ RUN ln -sf /dev/stdout /home/gnuhealth/gnuhealth/logs/gnuhealth.log
 
 EXPOSE 8000
 #Copy custom gnuhealthrc which contains Docker ENV Variables.
-
 COPY gnuhealthrc $HOME/.gnuhealthrc
 RUN /bin/bash -c "source $HOME/.gnuhealthrc"
 ENTRYPOINT ["/home/gnuhealth/start_gnuhealth.sh"]
