@@ -65,7 +65,5 @@ RUN ln -sf /dev/stdout /home/gnuhealth/gnuhealth/logs/gnuhealth.log
 EXPOSE 8000
 #Copy custom gnuhealthrc which contains Docker ENV Variables.
 COPY gnuhealthrc $HOME/.gnuhealthrc
-RUN /bin/bash -c "source $HOME/.gnuhealthrc"
-
 ENTRYPOINT ["/home/gnuhealth/start_gnuhealth.sh"]
-CMD -d $POSTGRES_DATABASE
+CMD [""]
