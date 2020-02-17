@@ -68,4 +68,4 @@ COPY gnuhealthrc $HOME/.gnuhealthrc
 RUN /bin/bash -c "source $HOME/.gnuhealthrc"
 
 ENTRYPOINT ["/home/gnuhealth/start_gnuhealth.sh"]
-CMD [ "-d $POSTGRES_DATABASE" ]
+CMD -d $POSTGRES_DATABASE
