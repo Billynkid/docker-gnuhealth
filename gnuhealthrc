@@ -18,10 +18,10 @@ set -e
 : ${DB_PASSWORD:=${POSTGRES_ENV_POSTGRES_PASSWORD}}
 : ${DB_HOSTNAME:=${POSTGRES_PORT_5432_TCP_ADDR:='postgres'}}
 : ${DB_PORT:=${POSTGRES_PORT_5432_TCP_PORT:='5432'}}
-: ${TRYTOND_DATABASE_URI:="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOSTNAME}:${DB_PORT}/"}
+: ${TRYTOND_DATABASE__URI:="postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOSTNAME}:${DB_PORT}/"}
 : ${PYTHONOPTIMIZE:=1}
 
-export TRYTOND_DATABASE_URI PYTHONOPTIMIZE
+export TRYTOND_DATABASE__URI PYTHONOPTIMIZE
 
 # Get the most current Tryton server version
 # It should only be one trytond, but just in case..
