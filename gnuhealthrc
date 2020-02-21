@@ -39,7 +39,7 @@ export PATH=$PATH:$HOME/.local/bin
 # Add Tryton server configuration file
 export TRYTOND_CONFIG=${GNUHEALTH_DIR}/tryton/server/config/trytond.conf
 
-sed -E "s|^uri = postgresql://localhost:5432|uri = "${TRYTOND_DATABASE__URI}"|" $TRYTOND_CONFIG
+sed -E -i "s|^uri = postgresql://localhost:5432|uri = "${TRYTOND_DATABASE__URI}"|" $TRYTOND_CONFIG
 
 # Aliases
 alias cdlogs='cd ${GNUHEALTH_DIR}/logs'
