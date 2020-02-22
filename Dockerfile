@@ -2,8 +2,7 @@ from amazonlinux:2
 ENV TERM=xterm-256color
 
 #Add Dependencies
-RUN yum -y install git wget patch python3 python3-tools python3-pip python3-ldap 2to3 which tar awslogs sudo 
-
+RUN yum -y install git wget patch python3 python3-tools python3-pip python3-ldap 2to3 which tar awslogs sudo
 #Get and Install nodejs
 RUN set -o pipefail && wget -qO- https://rpm.nodesource.com/setup_13.x | bash -
 RUN yum -y install nodejs
@@ -43,7 +42,8 @@ RUN $HOME/gnuhealth-latest/gnuhealth-setup install
 WORKDIR $HOME
 
 #Install SAO Web Client
-RUN git clone https://github.com/tryton/sao.git
+RUN git clone https://github.com/tryton/sao.git -b 5.0
+#RUN hg clone http://hg.tryton.org/sao sao
 WORKDIR $HOME/sao
 RUN npm install grunt-po2json --save-dev
 RUN npm install grunt-xgettext --save-dev
