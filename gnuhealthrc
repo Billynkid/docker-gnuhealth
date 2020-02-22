@@ -64,5 +64,4 @@ export GNUHEALTH_VERSION=`cat ${GNUHEALTH_DIR}/version`
 
 PS1="\[\e[32;2m\]\u@\h:\[\e[30;0m\]\w $ \[\e[0m\]"
 
-printenv
-set +x		
+

@@ -37,6 +37,7 @@ RUN set -o pipefail && wget -qO- https://ftp.gnu.org/gnu/health/gnuhealth-setup-
 RUN sed -i -E "s/werkzeug/\werkzeug==0.16.1/" gnuhealth-setup
 
 #Install GNUHealth
+COPY gnuhealth-setup $HOME/gnuhealth-latest/gnuhealth-setup
 RUN $HOME/gnuhealth-latest/gnuhealth-setup install
 
 WORKDIR $HOME
