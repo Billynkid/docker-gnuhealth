@@ -41,8 +41,13 @@ export TRYTOND_CONFIG=${GNUHEALTH_DIR}/tryton/server/config/trytond.conf
 
 sed -E -i "s|^uri = postgresql://localhost:5432|uri = "${TRYTOND_DATABASE__URI}"|" $TRYTOND_CONFIG
 
-# Build [ldap_authentication]
-printf "\n[ldap_authentication]\nuri = %s\nbind_pass = %s\nuid = sAMAccountName\n" "${TRYTOND_LDAP_AUTHENTICATION__URI}" "${LDAP_PASSWORD}" >> $HOME/gnuhealth/tryton/server/config/trytond.conf
+if grep -Fxq "[ldap_authentication]" $TRYTOND_CONFIG
+then
+    echo "Doing nothing..."
+else
+    # Build [ldap_authentication]
+    printf "\n[ldap_authentication]\nuri = %s\nbind_pass = %s\nuid = sAMAccountName\n" "${TRYTOND_LDAP_AUTHENTICATION__URI}" "${LDAP_PASSWORD}" >> $HOME/gnuhealth/tryton/server/config/trytond.conf
+fi
 
 # Aliases
 alias cdlogs='cd ${GNUHEALTH_DIR}/logs'
