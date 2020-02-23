@@ -60,9 +60,6 @@ RUN sed -i '/^\[web\]/a\root = /home/gnuhealth/sao/' $HOME/gnuhealth/tryton/serv
 RUN sed -E -i "s/^listen = \*:8000/listen = 0.0.0.0:8000/g" $HOME/gnuhealth/tryton/server/config/trytond.conf
 RUN sed -E -i "s/^listen = \*:8080/listen = 0.0.0.0:8080/g" $HOME/gnuhealth/tryton/server/config/trytond.conf
 
-# Build ldapauthentication
-RUN echo "[ldap_authentication]\nuri = \nbind_pass = \nuid = sAMAccountName\n" >> $HOME/gnuhealth/tryton/server/config/trytond.conf
-
 # Output logs
 RUN ln -sf /dev/stdout /home/gnuhealth/gnuhealth/logs/gnuhealth.log
 

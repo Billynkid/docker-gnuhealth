@@ -39,7 +39,12 @@ export PATH=$PATH:$HOME/.local/bin
 # Add Tryton server configuration file
 export TRYTOND_CONFIG=${GNUHEALTH_DIR}/tryton/server/config/trytond.conf
 
-sed -E -i "s|^uri = postgresql://localhost:5432|uri = "${TRYTOND_DATABASE__URI}"|" $TRYTOND_CONFIG
+sed -E -i "s|^\[database\]/a\uri = postgresql://localhost:5432|uri = "${TRYTOND_DATABASE__URI}"|" $TRYTOND_CONFIG
+
+sed -E -i "s|^\[ldap_authentication\]/a\uri = |uri = "${TRYTOND_LDAP_AUTHENTICATION__URI}"|" $TRYTOND_CONFIG
+
+# Build [ldap_authentication]
+printf "\n[ldap_authentication]\nuri = %s\nbind_pass = %s\nuid = sAMAccountName\n" "${TRYTOND_LDAP_AUTHENTICATION__URI}" "${LDAP_PASSWORD}" >> $HOME/gnuhealth/tryton/server/config/trytond.conf
 
 # Aliases
 alias cdlogs='cd ${GNUHEALTH_DIR}/logs'
