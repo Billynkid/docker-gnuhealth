@@ -46,7 +46,7 @@ then
     echo "Doing nothing..."
 else
     # Build [ldap_authentication]
-    printf "\n[ldap_authentication]\nuri = %s\nbind_pass = %s\nuid = sAMAccountName\n" "${TRYTOND_LDAP_AUTHENTICATION__URI}" "${LDAP_PASSWORD}" >> $HOME/gnuhealth/tryton/server/config/trytond.conf
+    printf "\n[ldap_authentication]\nuri = ldaps://%s\nbind_pass = %s\nuid = sAMAccountName\n" "${TRYTOND_LDAP_AUTHENTICATION__URI}" "${LDAP_PASSWORD}" >> $HOME/gnuhealth/tryton/server/config/trytond.conf
 fi
 
 # Aliases
