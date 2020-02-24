@@ -66,5 +66,6 @@ RUN ln -sf /dev/stdout /home/gnuhealth/gnuhealth/logs/gnuhealth.log
 EXPOSE 8000
 #Copy custom gnuhealthrc which contains Docker ENV Variables.
 COPY gnuhealthrc $HOME/.gnuhealthrc
+COPY gnuhealth_log.conf $HOME/gnuhealth/tryton/server/config/gnuhealth_log.conf
 ENTRYPOINT ["/home/gnuhealth/start_gnuhealth.sh"]
 CMD [""]
