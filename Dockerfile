@@ -61,7 +61,7 @@ RUN sed -E -i "s/^listen = \*:8000/listen = 0.0.0.0:8000/g" $HOME/gnuhealth/tryt
 RUN sed -E -i "s/^listen = \*:8080/listen = 0.0.0.0:8080/g" $HOME/gnuhealth/tryton/server/config/trytond.conf
 
 # Output logs
-RUN ln -sf /dev/stdout /home/gnuhealth/gnuhealth/logs/gnuhealth.log
+#RUN ln -sf /dev/stdout /home/gnuhealth/gnuhealth/logs/gnuhealth.log
 
 EXPOSE 8000
 #Copy custom gnuhealthrc which contains Docker ENV Variables.
