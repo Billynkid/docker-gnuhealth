@@ -68,4 +68,4 @@ EXPOSE 8000
 COPY gnuhealthrc $HOME/.gnuhealthrc
 COPY gnuhealth_log.conf $HOME/gnuhealth/tryton/server/config/gnuhealth_log.conf
 ENTRYPOINT ["/home/gnuhealth/start_gnuhealth.sh"]
-CMD [""]
+CMD ["-c /home/gnuhealth/gnuhealth/tryton/server/config/trytond.conf --logconf /home/gnuhealth/gnuhealth/tryton/server/config/gnuhealth_log.conf"]
