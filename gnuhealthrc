@@ -54,7 +54,7 @@ then
     echo "Doing nothing..."
 else
     # Build [session]
-    printf "\n[session]\nauthentications = password,ldap >> $HOME/gnuhealth/tryton/server/config/trytond.conf
+    printf "\n[session]\nauthentications = password,ldap" >> $HOME/gnuhealth/tryton/server/config/trytond.conf
 fi
 
 # Aliases
